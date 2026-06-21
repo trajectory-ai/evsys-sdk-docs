@@ -1,0 +1,387 @@
+# Documentation
+
+
+- **Getting Started**
+- [Introduction](/docs): A declarative framework for LLM training experiments — SFT, RL, and distillation from a single YAML, built so coding agents can launch experiments, learn from them, and train models continuously.
+- [Installation](/docs/installation): Get evsys-sdk installed and run your first experiment without a GPU.
+- [Quickstart](/docs/quickstart): Train your first model in five minutes — no GPU, no network — then point it at a real backend.
+- Examples
+  - [SFT — Supervised Fine-Tuning](/docs/examples/sft): A complete, run-it-yourself SFT walkthrough — JSONL data, a transform, the built-in sft algorithm, in-loop validation, and local logging, explained line by line.
+  - [RL — Reinforcement Learning](/docs/examples/rl): A complete, run-it-yourself RL walkthrough — tasks with verifiers as the reward, the built-in rl algorithm, rollouts via Harbor, in-loop validation, and local logging.
+  - [SDFT — Self-Distillation Fine-Tuning](/docs/examples/sdft): A complete, run-it-yourself SDFT walkthrough — prompts with gold answers, a frozen teacher built from the same model, the built-in sdft algorithm, in-loop validation, and local logging.
+- [Putting it all together — Autoresearch!](/docs/autoresearch): How a coding agent like Claude Code writes its own experiments — reads past results, launches a new run on Tinker, scores it, writes a conclusion, and goes again.
+
+- **Concepts**
+- Concepts
+  - [Architecture](/docs/concepts/architecture): The whole system at a glance — one ExperimentConfig, five layers, eight registries.
+  - [Extensibility](/docs/concepts/extensibility): The registry + Config + kind/params pattern — register your own algorithms, verifiers, backends, and more without forking the SDK.
+  - Plugins
+    - [Backends](/docs/concepts/plugins/backends): The compute plane that materializes a model and hands training resources to the algorithm.
+    - [Algorithms](/docs/concepts/plugins/algorithms): The training recipe — SFT, RL, distillation, or any custom loss — that decides what each batch contains.
+    - [Agents](/docs/concepts/plugins/agents): The pluggable rollout harness the policy is trained inside, so it learns to use that harness.
+    - [Transforms](/docs/concepts/plugins/transforms): Ordered row-rewriters that turn raw dataset rows into the standardized rows your algorithm consumes.
+    - [Verifiers](/docs/concepts/plugins/verifiers): Two reward mechanisms — the Verifier class registry and the in-process verifier-fn registry referenced from task data.
+    - [Metrics](/docs/concepts/plugins/metrics): Reducers that collapse per-task, per-sample rewards into one benchmark scalar.
+    - [Data stores](/docs/concepts/plugins/data-stores): The read/write layer — where the SDK reads inputs from and writes outputs to.
+    - [Log stores](/docs/concepts/plugins/log-stores): Where metrics, hyperparameters, and artifact pointers go as training proceeds.
+    - [Callbacks](/docs/concepts/plugins/callbacks): Lifecycle + logging hooks fired through the experiment and training loop.
+    - [Inference clients](/docs/concepts/plugins/inference): How evaluation and RL query a model to generate text.
+  - [Experiments](/docs/concepts/experiments): The organizing unit — a hypothesis, one or more training runs, and an auto-synthesized conclusion.
+  - [Data](/docs/concepts/data): Raw sources → ordered transforms → standardized typed rows that carry only data.
+  - [Algorithms & Evaluation](/docs/concepts/algorithms): One contract — train(ctx) -> RunResult — plus an optional gradient toolkit and a test/validation firewall.
+
+- **Guides**
+- [Cookbook](/docs/cookbook): End-to-end walkthroughs for the most common tasks.
+
+- **Reference**
+- [SDK Reference](/docs/reference): The full hand-written reference for configs, CLI, and protocols.
+- [Design & Architecture](/docs/design): Layout, protocols, and the rationale behind the SDK.
+- Api
+  - evsys_sdk
+    - [evsys_sdk](/docs/evsys_sdk)
+    - _entry_points
+      - [_entry_points](/docs/evsys_sdk/_entry_points)
+    - _harbor_upload
+      - [_harbor_upload](/docs/evsys_sdk/_harbor_upload)
+      - [HarborUploadResult](/docs/evsys_sdk/_harbor_upload/HarborUploadResult)
+    - algorithms
+      - [algorithms](/docs/evsys_sdk/algorithms)
+      - base
+        - [base](/docs/evsys_sdk/algorithms/base)
+        - [BaseAlgorithm](/docs/evsys_sdk/algorithms/base/BaseAlgorithm)
+        - [BaseAlgorithmConfig](/docs/evsys_sdk/algorithms/base/BaseAlgorithmConfig)
+      - combo
+        - [combo](/docs/evsys_sdk/algorithms/combo)
+        - [ComboAlgorithm](/docs/evsys_sdk/algorithms/combo/ComboAlgorithm)
+        - [ComboConfig](/docs/evsys_sdk/algorithms/combo/ComboConfig)
+        - [ComboPhaseConfig](/docs/evsys_sdk/algorithms/combo/ComboPhaseConfig)
+      - gepa_prompt
+        - [gepa_prompt](/docs/evsys_sdk/algorithms/gepa_prompt)
+        - [GEPAPromptAlgorithm](/docs/evsys_sdk/algorithms/gepa_prompt/GEPAPromptAlgorithm)
+        - [GEPAPromptConfig](/docs/evsys_sdk/algorithms/gepa_prompt/GEPAPromptConfig)
+      - local_rl
+        - [local_rl](/docs/evsys_sdk/algorithms/local_rl)
+        - [LocalRL](/docs/evsys_sdk/algorithms/local_rl/LocalRL)
+        - [LocalRLConfig](/docs/evsys_sdk/algorithms/local_rl/LocalRLConfig)
+      - local_sft
+        - [local_sft](/docs/evsys_sdk/algorithms/local_sft)
+        - [LocalSFT](/docs/evsys_sdk/algorithms/local_sft/LocalSFT)
+        - [LocalSFTConfig](/docs/evsys_sdk/algorithms/local_sft/LocalSFTConfig)
+      - mock_rl
+        - [mock_rl](/docs/evsys_sdk/algorithms/mock_rl)
+        - [MockRL](/docs/evsys_sdk/algorithms/mock_rl/MockRL)
+        - [MockRLConfig](/docs/evsys_sdk/algorithms/mock_rl/MockRLConfig)
+      - mock_sft
+        - [mock_sft](/docs/evsys_sdk/algorithms/mock_sft)
+        - [MockSFT](/docs/evsys_sdk/algorithms/mock_sft/MockSFT)
+        - [MockSFTConfig](/docs/evsys_sdk/algorithms/mock_sft/MockSFTConfig)
+      - rl
+        - [rl](/docs/evsys_sdk/algorithms/rl)
+        - [RL](/docs/evsys_sdk/algorithms/rl/RL)
+        - [RLConfig](/docs/evsys_sdk/algorithms/rl/RLConfig)
+      - sdft
+        - [sdft](/docs/evsys_sdk/algorithms/sdft)
+        - [SDFT](/docs/evsys_sdk/algorithms/sdft/SDFT)
+        - [SDFTConfig](/docs/evsys_sdk/algorithms/sdft/SDFTConfig)
+      - sft
+        - [sft](/docs/evsys_sdk/algorithms/sft)
+        - [SFT](/docs/evsys_sdk/algorithms/sft/SFT)
+        - [SFTConfig](/docs/evsys_sdk/algorithms/sft/SFTConfig)
+    - backends
+      - [backends](/docs/evsys_sdk/backends)
+      - local
+        - [local](/docs/evsys_sdk/backends/local)
+        - [LocalBackend](/docs/evsys_sdk/backends/local/LocalBackend)
+        - [LocalBackendConfig](/docs/evsys_sdk/backends/local/LocalBackendConfig)
+      - mock
+        - [mock](/docs/evsys_sdk/backends/mock)
+        - [MockBackend](/docs/evsys_sdk/backends/mock/MockBackend)
+        - [MockBackendConfig](/docs/evsys_sdk/backends/mock/MockBackendConfig)
+      - tinker
+        - [tinker](/docs/evsys_sdk/backends/tinker)
+        - [TinkerBackend](/docs/evsys_sdk/backends/tinker/TinkerBackend)
+        - [TinkerBackendConfig](/docs/evsys_sdk/backends/tinker/TinkerBackendConfig)
+    - benchmark
+      - [benchmark](/docs/evsys_sdk/benchmark)
+      - [Benchmark](/docs/evsys_sdk/benchmark/Benchmark)
+      - [BenchmarkScore](/docs/evsys_sdk/benchmark/BenchmarkScore)
+      - [BenchmarkTaskResult](/docs/evsys_sdk/benchmark/BenchmarkTaskResult)
+    - benchmark_run
+      - [benchmark_run](/docs/evsys_sdk/benchmark_run)
+    - benchmark_upload
+      - [benchmark_upload](/docs/evsys_sdk/benchmark_upload)
+      - [UploadResult](/docs/evsys_sdk/benchmark_upload/UploadResult)
+    - checkpoint
+      - [checkpoint](/docs/evsys_sdk/checkpoint)
+      - [Checkpoint](/docs/evsys_sdk/checkpoint/Checkpoint)
+    - cli
+      - [cli](/docs/evsys_sdk/cli)
+    - config
+      - [config](/docs/evsys_sdk/config)
+      - [_Strict](/docs/evsys_sdk/config/_Strict)
+      - [AlgorithmConfig](/docs/evsys_sdk/config/AlgorithmConfig)
+      - [BackendConfig](/docs/evsys_sdk/config/BackendConfig)
+      - [CallbackSpec](/docs/evsys_sdk/config/CallbackSpec)
+      - [ContinualConfig](/docs/evsys_sdk/config/ContinualConfig)
+      - [DataConfig](/docs/evsys_sdk/config/DataConfig)
+      - [DataStoreSpec](/docs/evsys_sdk/config/DataStoreSpec)
+      - [ExperimentConfig](/docs/evsys_sdk/config/ExperimentConfig)
+      - [LogStoreSpec](/docs/evsys_sdk/config/LogStoreSpec)
+      - [MatrixSpec](/docs/evsys_sdk/config/MatrixSpec)
+      - [ModelConfig](/docs/evsys_sdk/config/ModelConfig)
+      - [RunConfig](/docs/evsys_sdk/config/RunConfig)
+      - [TransformSpec](/docs/evsys_sdk/config/TransformSpec)
+      - [VerifierSpec](/docs/evsys_sdk/config/VerifierSpec)
+    - constants
+      - [constants](/docs/evsys_sdk/constants)
+    - dashboard_client
+      - [dashboard_client](/docs/evsys_sdk/dashboard_client)
+      - [DashboardClient](/docs/evsys_sdk/dashboard_client/DashboardClient)
+      - [DashboardClientError](/docs/evsys_sdk/dashboard_client/DashboardClientError)
+      - [EvsysAuthError](/docs/evsys_sdk/dashboard_client/EvsysAuthError)
+      - [ExperimentRun](/docs/evsys_sdk/dashboard_client/ExperimentRun)
+    - data_stores
+      - [data_stores](/docs/evsys_sdk/data_stores)
+      - in_memory
+        - [in_memory](/docs/evsys_sdk/data_stores/in_memory)
+        - [InMemoryDataStore](/docs/evsys_sdk/data_stores/in_memory/InMemoryDataStore)
+        - [InMemoryDataStoreConfig](/docs/evsys_sdk/data_stores/in_memory/InMemoryDataStoreConfig)
+      - local
+        - [local](/docs/evsys_sdk/data_stores/local)
+        - [LocalDataStore](/docs/evsys_sdk/data_stores/local/LocalDataStore)
+        - [LocalDataStoreConfig](/docs/evsys_sdk/data_stores/local/LocalDataStoreConfig)
+    - data_types
+      - [data_types](/docs/evsys_sdk/data_types)
+      - [ChatMessagesRow](/docs/evsys_sdk/data_types/ChatMessagesRow)
+      - [E2BVerifier](/docs/evsys_sdk/data_types/E2BVerifier)
+      - [HarborTask](/docs/evsys_sdk/data_types/HarborTask)
+      - [InProcessVerifier](/docs/evsys_sdk/data_types/InProcessVerifier)
+      - [LLMJudgeVerifier](/docs/evsys_sdk/data_types/LLMJudgeVerifier)
+      - [PromptExample](/docs/evsys_sdk/data_types/PromptExample)
+      - [TargetFormat](/docs/evsys_sdk/data_types/TargetFormat)
+    - eval
+      - [eval](/docs/evsys_sdk/eval)
+      - matcher
+        - [matcher](/docs/evsys_sdk/eval/matcher)
+        - [AliasMatcher](/docs/evsys_sdk/eval/matcher/AliasMatcher)
+      - model_eval
+        - [model_eval](/docs/evsys_sdk/eval/model_eval)
+        - [ModelEvalConfig](/docs/evsys_sdk/eval/model_eval/ModelEvalConfig)
+        - [ModelEvalResult](/docs/evsys_sdk/eval/model_eval/ModelEvalResult)
+        - [PromptBuilder](/docs/evsys_sdk/eval/model_eval/PromptBuilder)
+      - report
+        - [report](/docs/evsys_sdk/eval/report)
+        - [EvalSummary](/docs/evsys_sdk/eval/report/EvalSummary)
+      - retry
+        - [retry](/docs/evsys_sdk/eval/retry)
+        - [RetryFailure](/docs/evsys_sdk/eval/retry/RetryFailure)
+        - [RetryReport](/docs/evsys_sdk/eval/retry/RetryReport)
+      - runner
+        - [runner](/docs/evsys_sdk/eval/runner)
+        - [EvalArtifacts](/docs/evsys_sdk/eval/runner/EvalArtifacts)
+    - experiment
+      - [experiment](/docs/evsys_sdk/experiment)
+      - [ArmResult](/docs/evsys_sdk/experiment/ArmResult)
+      - [EvalResult](/docs/evsys_sdk/experiment/EvalResult)
+      - [Experiment](/docs/evsys_sdk/experiment/Experiment)
+      - [ExperimentResult](/docs/evsys_sdk/experiment/ExperimentResult)
+    - inference
+      - [inference](/docs/evsys_sdk/inference)
+      - chat_templated
+        - [chat_templated](/docs/evsys_sdk/inference/chat_templated)
+        - [ChatTemplatedInference](/docs/evsys_sdk/inference/chat_templated/ChatTemplatedInference)
+      - claude
+        - [claude](/docs/evsys_sdk/inference/claude)
+        - [ClaudeInference](/docs/evsys_sdk/inference/claude/ClaudeInference)
+        - [ClaudeInferenceConfig](/docs/evsys_sdk/inference/claude/ClaudeInferenceConfig)
+      - gemini
+        - [gemini](/docs/evsys_sdk/inference/gemini)
+        - [GeminiInference](/docs/evsys_sdk/inference/gemini/GeminiInference)
+        - [GeminiInferenceConfig](/docs/evsys_sdk/inference/gemini/GeminiInferenceConfig)
+      - local
+        - [local](/docs/evsys_sdk/inference/local)
+        - [LocalInference](/docs/evsys_sdk/inference/local/LocalInference)
+        - [LocalInferenceConfig](/docs/evsys_sdk/inference/local/LocalInferenceConfig)
+      - mock
+        - [mock](/docs/evsys_sdk/inference/mock)
+        - [MockInference](/docs/evsys_sdk/inference/mock/MockInference)
+        - [MockInferenceConfig](/docs/evsys_sdk/inference/mock/MockInferenceConfig)
+      - openai
+        - [openai](/docs/evsys_sdk/inference/openai)
+        - [OpenAIInference](/docs/evsys_sdk/inference/openai/OpenAIInference)
+        - [OpenAIInferenceConfig](/docs/evsys_sdk/inference/openai/OpenAIInferenceConfig)
+      - tinker
+        - [tinker](/docs/evsys_sdk/inference/tinker)
+        - [TinkerInference](/docs/evsys_sdk/inference/tinker/TinkerInference)
+        - [TinkerInferenceConfig](/docs/evsys_sdk/inference/tinker/TinkerInferenceConfig)
+    - local_store
+      - [local_store](/docs/evsys_sdk/local_store)
+      - [LocalExperimentStore](/docs/evsys_sdk/local_store/LocalExperimentStore)
+    - log_stores
+      - [log_stores](/docs/evsys_sdk/log_stores)
+      - jsonl
+        - [jsonl](/docs/evsys_sdk/log_stores/jsonl)
+        - [JSONLLogStore](/docs/evsys_sdk/log_stores/jsonl/JSONLLogStore)
+        - [JSONLLogStoreConfig](/docs/evsys_sdk/log_stores/jsonl/JSONLLogStoreConfig)
+      - multiplex
+        - [multiplex](/docs/evsys_sdk/log_stores/multiplex)
+        - [MultiplexLogStore](/docs/evsys_sdk/log_stores/multiplex/MultiplexLogStore)
+        - [MultiplexLogStoreConfig](/docs/evsys_sdk/log_stores/multiplex/MultiplexLogStoreConfig)
+      - tensorboard
+        - [tensorboard](/docs/evsys_sdk/log_stores/tensorboard)
+        - [TensorBoardLogStore](/docs/evsys_sdk/log_stores/tensorboard/TensorBoardLogStore)
+        - [TensorBoardLogStoreConfig](/docs/evsys_sdk/log_stores/tensorboard/TensorBoardLogStoreConfig)
+    - logger
+      - [logger](/docs/evsys_sdk/logger)
+      - [ColorFormatter](/docs/evsys_sdk/logger/ColorFormatter)
+    - metrics
+      - [metrics](/docs/evsys_sdk/metrics)
+      - basic
+        - [basic](/docs/evsys_sdk/metrics/basic)
+        - [_PassAtK](/docs/evsys_sdk/metrics/basic/_PassAtK)
+        - [_PassHatK](/docs/evsys_sdk/metrics/basic/_PassHatK)
+        - [Avg](/docs/evsys_sdk/metrics/basic/Avg)
+        - [MeanReward](/docs/evsys_sdk/metrics/basic/MeanReward)
+        - [PassAt1](/docs/evsys_sdk/metrics/basic/PassAt1)
+        - [PassAt3](/docs/evsys_sdk/metrics/basic/PassAt3)
+        - [PassHat3](/docs/evsys_sdk/metrics/basic/PassHat3)
+        - [PassRate](/docs/evsys_sdk/metrics/basic/PassRate)
+    - new_experiment
+      - [new_experiment](/docs/evsys_sdk/new_experiment)
+    - project_init
+      - [project_init](/docs/evsys_sdk/project_init)
+    - protocols
+      - [protocols](/docs/evsys_sdk/protocols)
+      - [Algorithm](/docs/evsys_sdk/protocols/Algorithm)
+      - [Backend](/docs/evsys_sdk/protocols/Backend)
+      - [DataStore](/docs/evsys_sdk/protocols/DataStore)
+      - [InferenceClient](/docs/evsys_sdk/protocols/InferenceClient)
+      - [LogStore](/docs/evsys_sdk/protocols/LogStore)
+      - [Metric](/docs/evsys_sdk/protocols/Metric)
+      - [RunContext](/docs/evsys_sdk/protocols/RunContext)
+      - [RunResult](/docs/evsys_sdk/protocols/RunResult)
+      - [Transform](/docs/evsys_sdk/protocols/Transform)
+      - [VerificationResult](/docs/evsys_sdk/protocols/VerificationResult)
+      - [Verifier](/docs/evsys_sdk/protocols/Verifier)
+    - registry
+      - [registry](/docs/evsys_sdk/registry)
+      - [Registry](/docs/evsys_sdk/registry/Registry)
+    - runner
+      - [runner](/docs/evsys_sdk/runner)
+    - step_metrics
+      - [step_metrics](/docs/evsys_sdk/step_metrics)
+    - store
+      - [store](/docs/evsys_sdk/store)
+      - [EvsysStore](/docs/evsys_sdk/store/EvsysStore)
+      - [EvsysStoreError](/docs/evsys_sdk/store/EvsysStoreError)
+    - sweep
+      - [sweep](/docs/evsys_sdk/sweep)
+      - [Sweep](/docs/evsys_sdk/sweep/Sweep)
+    - training
+      - [training](/docs/evsys_sdk/training)
+      - backend
+        - [backend](/docs/evsys_sdk/training/backend)
+        - [_MockResult](/docs/evsys_sdk/training/backend/_MockResult)
+        - [_ResolvedFuture](/docs/evsys_sdk/training/backend/_ResolvedFuture)
+        - [Backend](/docs/evsys_sdk/training/backend/Backend)
+        - [ForwardBackwardResult](/docs/evsys_sdk/training/backend/ForwardBackwardResult)
+        - [MockBackend](/docs/evsys_sdk/training/backend/MockBackend)
+        - [MockSamplingClient](/docs/evsys_sdk/training/backend/MockSamplingClient)
+        - [OptimStepResult](/docs/evsys_sdk/training/backend/OptimStepResult)
+        - [SamplingClient](/docs/evsys_sdk/training/backend/SamplingClient)
+      - batch_utils
+        - [batch_utils](/docs/evsys_sdk/training/batch_utils)
+      - callbacks
+        - [callbacks](/docs/evsys_sdk/training/callbacks)
+        - [Callback](/docs/evsys_sdk/training/callbacks/Callback)
+        - [CsvMetricsCallback](/docs/evsys_sdk/training/callbacks/CsvMetricsCallback)
+        - [CsvMetricsConfig](/docs/evsys_sdk/training/callbacks/CsvMetricsConfig)
+        - [DebugLoggerCallback](/docs/evsys_sdk/training/callbacks/DebugLoggerCallback)
+        - [DebugLoggerConfig](/docs/evsys_sdk/training/callbacks/DebugLoggerConfig)
+        - [EarlyStoppingCallback](/docs/evsys_sdk/training/callbacks/EarlyStoppingCallback)
+        - [EarlyStoppingConfig](/docs/evsys_sdk/training/callbacks/EarlyStoppingConfig)
+        - [EvsysLoggerCallback](/docs/evsys_sdk/training/callbacks/EvsysLoggerCallback)
+        - [EvsysLoggerConfig](/docs/evsys_sdk/training/callbacks/EvsysLoggerConfig)
+        - [LocalLoggerCallback](/docs/evsys_sdk/training/callbacks/LocalLoggerCallback)
+        - [LocalLoggerConfig](/docs/evsys_sdk/training/callbacks/LocalLoggerConfig)
+        - [LogContext](/docs/evsys_sdk/training/callbacks/LogContext)
+        - [LoopState](/docs/evsys_sdk/training/callbacks/LoopState)
+        - [PrintProgressCallback](/docs/evsys_sdk/training/callbacks/PrintProgressCallback)
+        - [PrintProgressConfig](/docs/evsys_sdk/training/callbacks/PrintProgressConfig)
+        - [TensorBoardLoggerCallback](/docs/evsys_sdk/training/callbacks/TensorBoardLoggerCallback)
+        - [TensorBoardLoggerConfig](/docs/evsys_sdk/training/callbacks/TensorBoardLoggerConfig)
+        - [WandbLoggerCallback](/docs/evsys_sdk/training/callbacks/WandbLoggerCallback)
+        - [WandbLoggerConfig](/docs/evsys_sdk/training/callbacks/WandbLoggerConfig)
+      - checkpoints
+        - [checkpoints](/docs/evsys_sdk/training/checkpoints)
+        - [CheckpointManager](/docs/evsys_sdk/training/checkpoints/CheckpointManager)
+        - [ManifestRow](/docs/evsys_sdk/training/checkpoints/ManifestRow)
+      - data_processing
+        - [data_processing](/docs/evsys_sdk/training/data_processing)
+        - [DatumMetadata](/docs/evsys_sdk/training/data_processing/DatumMetadata)
+      - evaluators
+        - [evaluators](/docs/evsys_sdk/training/evaluators)
+        - [_AsyncToSyncSampler](/docs/evsys_sdk/training/evaluators/_AsyncToSyncSampler)
+        - [BenchmarkEvaluator](/docs/evsys_sdk/training/evaluators/BenchmarkEvaluator)
+      - harbor_agents
+        - [harbor_agents](/docs/evsys_sdk/training/harbor_agents)
+        - [BasicLoopAgent](/docs/evsys_sdk/training/harbor_agents/BasicLoopAgent)
+        - [EvsysVerifier](/docs/evsys_sdk/training/harbor_agents/EvsysVerifier)
+        - [NoOpEnvironment](/docs/evsys_sdk/training/harbor_agents/NoOpEnvironment)
+      - harbor_engine
+        - [harbor_engine](/docs/evsys_sdk/training/harbor_engine)
+        - [HarborTaskAdapter](/docs/evsys_sdk/training/harbor_engine/HarborTaskAdapter)
+        - [PromptAdapter](/docs/evsys_sdk/training/harbor_engine/PromptAdapter)
+      - harbor_eval
+        - [harbor_eval](/docs/evsys_sdk/training/harbor_eval)
+      - loop
+        - [loop](/docs/evsys_sdk/training/loop)
+        - [_LoopMetricKeys](/docs/evsys_sdk/training/loop/_LoopMetricKeys)
+        - [Evaluator](/docs/evsys_sdk/training/loop/Evaluator)
+        - [LoopArtifacts](/docs/evsys_sdk/training/loop/LoopArtifacts)
+        - [StepBuilder](/docs/evsys_sdk/training/loop/StepBuilder)
+        - [TrainingBatch](/docs/evsys_sdk/training/loop/TrainingBatch)
+        - [TrainingLoop](/docs/evsys_sdk/training/loop/TrainingLoop)
+      - sdft_data
+        - [sdft_data](/docs/evsys_sdk/training/sdft_data)
+        - [CompletionSlice](/docs/evsys_sdk/training/sdft_data/CompletionSlice)
+        - [SDFTDataset](/docs/evsys_sdk/training/sdft_data/SDFTDataset)
+        - [SimpleSDFTDataset](/docs/evsys_sdk/training/sdft_data/SimpleSDFTDataset)
+      - sft_data
+        - [sft_data](/docs/evsys_sdk/training/sft_data)
+      - templates
+        - [templates](/docs/evsys_sdk/training/templates)
+      - tinker_backend
+        - [tinker_backend](/docs/evsys_sdk/training/tinker_backend)
+        - [_CoroFuture](/docs/evsys_sdk/training/tinker_backend/_CoroFuture)
+        - [TinkerBackend](/docs/evsys_sdk/training/tinker_backend/TinkerBackend)
+        - [TinkerSamplingClient](/docs/evsys_sdk/training/tinker_backend/TinkerSamplingClient)
+      - trajectory
+        - [trajectory](/docs/evsys_sdk/training/trajectory)
+        - [Trajectory](/docs/evsys_sdk/training/trajectory/Trajectory)
+        - [TrajectoryGroup](/docs/evsys_sdk/training/trajectory/TrajectoryGroup)
+        - [Turn](/docs/evsys_sdk/training/trajectory/Turn)
+    - transforms
+      - [transforms](/docs/evsys_sdk/transforms)
+      - identity
+        - [identity](/docs/evsys_sdk/transforms/identity)
+        - [IdentityConfig](/docs/evsys_sdk/transforms/identity/IdentityConfig)
+        - [IdentityTransform](/docs/evsys_sdk/transforms/identity/IdentityTransform)
+      - jsonl_to_chat
+        - [jsonl_to_chat](/docs/evsys_sdk/transforms/jsonl_to_chat)
+        - [JSONLToChatConfig](/docs/evsys_sdk/transforms/jsonl_to_chat/JSONLToChatConfig)
+        - [JSONLToChatTransform](/docs/evsys_sdk/transforms/jsonl_to_chat/JSONLToChatTransform)
+    - verifiers
+      - [verifiers](/docs/evsys_sdk/verifiers)
+      - fns
+        - [fns](/docs/evsys_sdk/verifiers/fns)
+      - format_only
+        - [format_only](/docs/evsys_sdk/verifiers/format_only)
+        - [FormatOnlyConfig](/docs/evsys_sdk/verifiers/format_only/FormatOnlyConfig)
+        - [FormatOnlyVerifier](/docs/evsys_sdk/verifiers/format_only/FormatOnlyVerifier)
+    - workspace
+      - [workspace](/docs/evsys_sdk/workspace)
+      - [MaterializedDataset](/docs/evsys_sdk/workspace/MaterializedDataset)
+      - [Workspace](/docs/evsys_sdk/workspace/Workspace)
+    - yaml_loader
+      - [yaml_loader](/docs/evsys_sdk/yaml_loader)

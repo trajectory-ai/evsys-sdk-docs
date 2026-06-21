@@ -1,0 +1,39 @@
+# Installation (/docs/installation)
+
+
+
+## Requirements [#requirements]
+
+* Python 3.12+
+* [`uv`](https://docs.astral.sh/uv/) (recommended) for environment management
+
+## Install [#install]
+
+```bash
+cd evsys-sdk
+uv sync
+source .venv/bin/activate
+```
+
+For real Tinker training, export your key:
+
+```bash
+export TINKER_API_KEY=...
+```
+
+## Verify [#verify]
+
+Run the test suite:
+
+```bash
+pytest tests/
+```
+
+Then run the no-GPU, no-network hello world:
+
+```bash
+python examples/01_local_mock_sft.py
+```
+
+You should see a `final_checkpoint` artifact and a `metrics.jsonl` under
+`examples/outputs/01/.../logs/`. Continue with the [Cookbook](/docs/cookbook).

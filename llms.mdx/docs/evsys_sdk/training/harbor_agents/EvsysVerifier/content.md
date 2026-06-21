@@ -1,0 +1,38 @@
+# EvsysVerifier (/docs/evsys_sdk/training/harbor_agents/EvsysVerifier)
+
+
+
+Score the agent's completion with a registered evsys verifier fn —
+host-side, no container exec. Reads the completion the agent wrote to its
+agent dir and the per-task spec (`fn_name`/`expected`/`params`)
+materialized into the task dir, and returns the reward as harbor's
+`VerifierResult`. Set as the job-level verifier (SHARED mode).
+
+## Functions [#functions]
+
+<PyFunction name="&#x22;verify&#x22;" type="&#x22;(self) -> VerifierResult&#x22;">
+  <PySourceCode>
+    ```python
+    async def verify(self) -> VerifierResult:
+        from ..verifiers import get_verifier_fn
+
+        completion = _read_text(Path(self.trial_paths.agent_dir) / _COMPLETION_FILE)
+        spec = _read_json(Path(self.task.paths.task_dir) / _VERIFIER_SPEC_FILE)
+        reward = 0.0
+        fn_name = spec.get("fn_name")
+        if fn_name:
+            try:
+                fn = get_verifier_fn(fn_name)
+                reward = float(fn(completion, spec.get("expected"), dict(spec.get("params") or {})))
+            except Exception:  # pragma: no cover - a bad fn shouldn't crash the trial
+                reward = 0.0
+        return VerifierResult(rewards={"reward": reward})
+    ```
+  </PySourceCode>
+
+  <div>
+    <PyParameter name="&#x22;self&#x22;" type="null" value="null" />
+  </div>
+
+  <PyFunctionReturn type="&#x22;harbor.models.verifier.result.VerifierResult&#x22;" />
+</PyFunction>
